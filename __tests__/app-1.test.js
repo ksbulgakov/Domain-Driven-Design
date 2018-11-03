@@ -16,7 +16,7 @@ test('app', () => {
     rows: 30,
     cols: 50,
     filmScreenings: [{ time }],
-  })
+  });
 });
 
 test('app2', () => {

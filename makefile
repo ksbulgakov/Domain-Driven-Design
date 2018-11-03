@@ -12,3 +12,6 @@ test:
 
 testw:
 	npm run test-jest-watch
+	
+execute:
+	npm run babel-node $(file)
