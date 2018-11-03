@@ -7,7 +7,7 @@
     "nodemon": "nodemon",
     "eslint": "eslint",
     "babel-node": "babel-node",
-    "test": "jest --coverage",
+    "test": "jest --color",
     "test-jest-watch": "jest --coverage -- watch"
   },
   "repository": {
@@ -38,6 +38,7 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "collectCoverage": true,
     "modulePathIgnorePatterns": [
       "placeholder"
     ]
