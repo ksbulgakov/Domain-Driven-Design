@@ -1,22 +1,22 @@
 import uuid from 'uuid-js';
 import ApplicationEntity from './ApplicationEntity';
 
-
-export default class Film extends ApplicationEntity {
+export default class User extends ApplicationEntity {
   static constraints = {
-    name: {
+    email: {
       presence: true,
+      email: true,
+      uniqueness: true,
     },
-    duration: {
-      presence: true,
+    createdAt: {
+      dateObject: true,
     },
-  }
+  };
 
-  constructor(name, duration) {
+  constructor(email) {
     super();
     this.id = uuid.create().hex;
+    this.email = email;
     this.createdAt = new Date();
-    this.name = name;
-    this.duration = duration;
   }
 }

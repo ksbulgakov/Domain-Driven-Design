@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/ksbulgakov/Domain-Driven-Design#readme",
   "dependencies": {
-    "uuid-js": "^0.7.5"
+    "lodash": "^4.17.11",
+    "uuid-js": "^0.7.5",
+    "validate.js": "^0.12.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
