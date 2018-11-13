@@ -1,15 +1,12 @@
 import uuid from 'uuid-js';
-import CinemaService from '../services/CinemaService';
-import * as repositories from '../repositories';
-import validator from '../lib/validation';
+import cinemaManager from '../src';
 
 describe('CinemaService', () => {
   let service;
 
   beforeEach(() => {
-    const repositoryInstances = Object.keys(repositories)
-      .reduce((acc, name) => ({ [name]: new repositories[name](), ...acc }), {});
-    service = new CinemaService(repositoryInstances, validator(repositoryInstances));
+    const app = cinemaManager();
+    service = app.services.Cinema;
   });
 
   it('createFilm', () => {

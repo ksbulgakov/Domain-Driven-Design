@@ -1,32 +1,31 @@
 import ApplicationService from './ApplicationService';
-import { Film, FilmScreening, CinemaHall } from '../entities';
 
 export default class extends ApplicationService {
   createCinemaHall(name, rows, cols) {
-    const cinemaHall = new CinemaHall(name, rows, cols);
+    const cinemaHall = new this.entities.CinemaHall(name, rows, cols);
     const errors = this.validate(cinemaHall);
     if (!errors) {
-      this.CinemaHallRepository.save(cinemaHall);
+      this.repositories.CinemaHall.save(cinemaHall);
     }
     return [cinemaHall, errors];
   }
 
   createFilm(name, duration) {
-    const film = new Film(name, duration);
+    const film = new this.entities.Film(name, duration);
     const errors = this.validate(film);
     if (!errors) {
-      this.FilmRepository.save(film);
+      this.repositories.Film.save(film);
     }
     return [film, errors];
   }
 
   createFilmScreening(filmId, cinemaHallId, time) {
-    const film = this.FilmRepository.find(filmId);
-    const cinemaHall = this.CinemaHallRepository.find(cinemaHallId);
-    const filmScreening = new FilmScreening(film, cinemaHall, time);
+    const film = this.repositories.Film.find(filmId);
+    const cinemaHall = this.repositories.CinemaHall.find(cinemaHallId);
+    const filmScreening = new this.entities.FilmScreening(film, cinemaHall, time);
     const errors = this.validate(filmScreening);
     if (!errors) {
-      this.FilmScreeningRepository.save(filmScreening);
+      this.repositories.FilmScreening.save(filmScreening);
     }
     return [filmScreening, errors];
   }

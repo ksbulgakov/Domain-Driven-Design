@@ -8,9 +8,6 @@ export default class User extends ApplicationEntity {
       email: true,
       uniqueness: true,
     },
-    createdAt: {
-      dateObject: true,
-    },
   };
 
   constructor(email) {

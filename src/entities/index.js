@@ -4,7 +4,7 @@ import CinemaHall from './CinemaHall';
 import FilmScreening from './FilmScreening';
 import FilmScreeningTicket from './FilmScreening/Ticket';
 
-export {
+export default {
   User,
   Film,
   CinemaHall,

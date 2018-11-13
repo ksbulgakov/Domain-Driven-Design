@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/ksbulgakov/Domain-Driven-Design#readme",
   "dependencies": {
+    "bottlejs": "^1.7.1",
     "lodash": "^4.17.11",
     "uuid-js": "^0.7.5",
     "validate.js": "^0.12.0"
@@ -42,7 +43,7 @@
     "testEnvironment": "node",
     "collectCoverage": true,
     "modulePathIgnorePatterns": [
-      "placeholder"
+      "placeHolder"
     ]
   }
 }
