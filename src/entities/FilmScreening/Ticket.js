@@ -1,4 +1,5 @@
 import uuid from 'uuid-js';
+import StateMachine from 'javascript-state-machine';
 import ApplicationEntity from '../ApplicationEntity';
 
 export default class FilmScreeningTicket extends ApplicationEntity {
@@ -6,7 +7,7 @@ export default class FilmScreeningTicket extends ApplicationEntity {
     filmScreening: {
       presence: true,
       uniqueness: {
-        scope: ['place'],
+        scope: ['place'], conditions: { _fsm: { state: 'active' } },
       },
     },
     user: {
@@ -31,5 +32,13 @@ export default class FilmScreeningTicket extends ApplicationEntity {
     this.user = user;
     this.place = place;
     this.createdAt = new Date();
+    this._fsm(); // eslint-disable-line
   }
 }
+
+StateMachine.factory(FilmScreeningTicket, {
+  init: 'active',
+  transitions: [
+    { name: 'refund', from: 'active', to: 'returned' },
+  ],
+});

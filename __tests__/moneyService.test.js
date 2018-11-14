@@ -1,4 +1,4 @@
-import cinemaManager from '../src/index';
+import cinemaManager from '../src';
 
 describe('MoneyService', () => {
   let services;
@@ -19,7 +19,6 @@ describe('MoneyService', () => {
     services.Money.createPrice(cinemaHall.id, 100);
     [filmScreening] = services.Money
       .createFilmScreening(film.id, cinemaHall.id, new Date());
-    services.Money.createPrice(cinemaHall.id, 100);
   });
 
   it('createPrice', () => {
@@ -31,40 +30,16 @@ describe('MoneyService', () => {
     expect(price).toMatchObject(expected);
   });
 
-  it('createFilmScreening (errors)', () => {
-    const f = () => services.Money.createFilmScreening();
-    expect(f).toThrow();
-  });
-
-  it('createFilmScreening', () => {
-    const time = new Date();
-    const [localFilmScreening] = services.Money
-      .createFilmScreening(film.id, cinemaHall.id, time);
-
-    const expected = {
-      // film,
-      // cinemaHall,
-      time,
-    };
-    expect(localFilmScreening).toMatchObject(expected);
-    const fs = repositories.FilmScreening.find(localFilmScreening.id);
-    expect(localFilmScreening).toMatchObject(fs);
-  });
-
   it('buyTicket', () => {
     const place = { row: 5, col: 3 };
     const [ticket] = services.Money.buyTicket(user.id, filmScreening.id, place);
-    const capital = repositories.CapitalTransaction.findBy({ ticket });
+    const capitalTransaction = repositories.CapitalTransaction.findBy({ ticket });
     const ticketExpected = {
       place,
     };
 
     expect(ticket).toMatchObject(ticketExpected);
-
-    const capitalExpected = {
-      ticket,
-    };
-    expect(capital).toMatchObject(capitalExpected);
+    expect(capitalTransaction).toHaveProperty('ticket', ticket);
   });
 
   it('buyTicket (errors)', () => {
@@ -78,8 +53,44 @@ describe('MoneyService', () => {
     services.Money.buyTicket(user.id, filmScreening.id, place);
     const [, errors] = services.Money.buyTicket(user.id, filmScreening.id, place);
     const expected = {
-      filmScreening: ['Film screening already exists'],
+      filmScreening: [
+        'Film screening already exists',
+      ],
     };
     expect(errors).toMatchObject(expected);
+  });
+
+  it('refundTicket', () => {
+    const place = { row: 5, col: 3 };
+    const [ticket] = services.Money.buyTicket(user.id, filmScreening.id, place);
+    const isRefunded = services.Money.refundTicket(ticket.id);
+    expect(isRefunded).toBe(true);
+    expect(ticket).toMatchObject({ _fsm: { state: 'returned' } });
+
+    const capitalTransactions = repositories.CapitalTransaction.findAllBy({ ticket });
+    expect(capitalTransactions).toHaveLength(2);
+    expect(capitalTransactions.reduce((acc, { cost }) => acc + cost, 0)).toBe(0);
+
+    services.Money.refundTicket(ticket.id);
+    const capitalTransactions2 = repositories.CapitalTransaction.findAllBy({ ticket });
+    expect(capitalTransactions2).toHaveLength(2);
+    expect(capitalTransactions2.reduce((acc, { cost }) => acc + cost, 0)).toBe(0);
+  });
+
+  it('createFilmScreening', () => {
+    const time = new Date();
+    const [localFilmScreening] = services.Money.createFilmScreening(film.id, cinemaHall.id, time);
+
+    const expected = {
+      // film,
+      // cinemaHall,
+      time,
+    };
+    expect(localFilmScreening).toMatchObject(expected);
+  });
+
+  it('createFilmScreening (errors)', () => {
+    const f = () => services.Money.createFilmScreening();
+    expect(f).toThrow();
   });
 });

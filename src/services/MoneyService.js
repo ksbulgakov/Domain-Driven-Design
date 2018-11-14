@@ -19,7 +19,7 @@ export default class extends ApplicationService {
     if (errors) {
       return [ticket, errors];
     }
-    const transaction = new this.entities.CapitalTransaction(ticket);
+    const transaction = new this.entities.CapitalTransaction(ticket, 'income');
     this.validate(transaction, { exception: true });
     this.repositories.FilmScreeningTicket.save(ticket);
     this.repositories.CapitalTransaction.save(transaction);
@@ -37,5 +37,14 @@ export default class extends ApplicationService {
       this.repositories.FilmScreening.save(filmScreening);
     }
     return [filmScreening, errors];
+  }
+
+  refundTicket(ticketId) {
+    const ticket = this.repositories.FilmScreeningTicket.find(ticketId);
+    if (ticket.is('returned')) return false;
+    const transaction = new this.entities.CapitalTransaction(ticket, 'loss');
+    this.validate(transaction, { exception: true });
+    this.repositories.CapitalTransaction.save(transaction);
+    return ticket.refund();
   }
 }
