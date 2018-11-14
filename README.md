@@ -9,3 +9,5 @@
 ## Desctiption
 
 Educational project based on TDD principles.
+
+A goal of the project is to create a service for saling cinema tickets.

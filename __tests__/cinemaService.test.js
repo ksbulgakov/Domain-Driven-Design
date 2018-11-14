@@ -1,4 +1,3 @@
-import uuid from 'uuid-js';
 import cinemaManager from '../src';
 
 describe('CinemaService', () => {
