@@ -12,15 +12,18 @@ export default class FilmScreening extends ApplicationEntity {
     time: {
       presence: true,
     },
+    cost: {
+      presence: true,
+      numericallity: true,
+    },
   }
 
-  constructor(film, cinemaHall, time) {
+  constructor(film, cinemaHall, time, cost) {
     super();
     this.id = uuid.create().hex;
-    this.createdAt = new Date();
     this.film = film;
     this.cinemaHall = cinemaHall;
     this.time = time;
-    this.cinemaHall.addFilmScreening(this);
+    this.cost = cost;
   }
 }
